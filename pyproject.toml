@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orrery"
+version = "0.1.0"
+description = "Neural particle world engine: a small graph network learns interaction laws from classical simulators and predicts the world tick by tick"
+readme = "README.md"
+license = { text = "MIT (orrery/gen/mpm2d.py, mpm3d.py, mpm_multi.py: Apache-2.0, see THIRD_PARTY_NOTICES)" }
+authors = [{ name = "Nick McBride" }]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "torch>=2.1",  # train.is_oom falls back to torch.cuda.OutOfMemoryError before 2.5
+    "imageio>=2.28",
+    "pillow>=9.0",
+]
+
+[project.optional-dependencies]
+# MLS-MPM teachers (gen/mpm2d.py, gen/mpm3d.py, gen/mpm_multi.py).
+# The N-body and plasma teachers are pure torch and do not need it.
+mpm = ["taichi>=1.6"]
+dev = ["pytest>=7"]
+
+[tool.setuptools.packages.find]
+include = ["orrery*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["taichi: needs the optional taichi dependency (skipped if absent)"]
